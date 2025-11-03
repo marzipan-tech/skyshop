@@ -1,4 +1,4 @@
-package model.article;
+package org.skypro.skyshop.model.article;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.skypro.skyshop.search.Searchable;

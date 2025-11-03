@@ -1,7 +1,7 @@
 package org.skypro.skyshop.controller;
 
-import model.article.Article;
-import model.product.Product;
+import org.skypro.skyshop.model.article.Article;
+import org.skypro.skyshop.model.product.Product;
 import org.skypro.skyshop.search.SearchService;
 import org.skypro.skyshop.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
