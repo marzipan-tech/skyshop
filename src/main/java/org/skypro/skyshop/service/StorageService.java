@@ -1,6 +1,5 @@
 package org.skypro.skyshop.service;
 
-import org.skypro.skyshop.exceptions.NoSuchProductException;
 import org.skypro.skyshop.model.article.Article;
 import org.skypro.skyshop.model.product.DiscountedProduct;
 import org.skypro.skyshop.model.product.FixPriceProduct;
@@ -67,10 +66,7 @@ public class StorageService {
     }
 
     public Optional<Product> getProductById(UUID id) {
-        if (id == null) {
-            throw new NoSuchProductException();
-        }
-        return Optional.ofNullable(storedProducts.get(id)).map(Optional::of).orElseThrow(NoSuchProductException::new);
+        return Optional.ofNullable(storedProducts.get(id));
     }
 }
 
