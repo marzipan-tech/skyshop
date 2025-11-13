@@ -7,14 +7,17 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.skypro.skyshop.exceptions.NoSuchProductException;
+import org.skypro.skyshop.model.basket.BasketItem;
 import org.skypro.skyshop.model.basket.ProductBasket;
 import org.skypro.skyshop.model.product.FixPriceProduct;
+import org.skypro.skyshop.model.product.Product;
 import org.skypro.skyshop.service.BasketService;
 import org.skypro.skyshop.service.StorageService;
 
 
 import java.util.*;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -52,8 +55,9 @@ public class BasketServiceTest {
     @Test
     public void whenProductBasketHasProducts_ThenGetUserBasketReturnsProperBasket() {
         UUID id = UUID.randomUUID();
+        Product someProduct = new FixPriceProduct(id, "some product");
         when(productBasket.getProductBasket()).thenReturn(Map.of(id, 3));
-        when(storageService.getProductById(id)).thenReturn(Optional.of(new FixPriceProduct(id, "some product")));
-        assertFalse(basketService.getUserBasket().getBasketItems().isEmpty());
+        when(storageService.getProductById(id)).thenReturn(Optional.of(someProduct));
+        assertThat(basketService.getUserBasket().getBasketItems()).extracting(BasketItem::getProduct).contains(someProduct);
     }
 }

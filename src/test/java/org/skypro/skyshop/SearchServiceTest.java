@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
@@ -67,5 +68,22 @@ public class SearchServiceTest {
         when(storageService.getAllArticles()).thenReturn(someArticles);
         Collection<SearchResult> results = searchService.search("this");
         assertFalse(results.isEmpty());
+    }
+
+    @Test
+    public void givenThereIsSuchProductInStorage_WhenSearch_ThenReturnListOfProperProducts() {
+        Product thisProduct = new SimpleProduct(UUID.randomUUID(), "this product", 100);
+        Article thisArticle = new Article(UUID.randomUUID(), "this article", "some text");
+        Product anotherProduct = new DiscountedProduct(UUID.randomUUID(), "another product", 100, 150);
+        Article anotherArticle = new Article(UUID.randomUUID(), "another article", "some text");
+        Collection<Product> someProducts = Arrays.asList(thisProduct, anotherProduct);
+        Collection<Article> someArticles = Arrays.asList(thisArticle, anotherArticle);
+        when(storageService.getAllProducts()).thenReturn(someProducts);
+        when(storageService.getAllArticles()).thenReturn(someArticles);
+        Collection<SearchResult> results = searchService.search("this");
+        assertThat(results).extracting(SearchResult::getId).contains(thisProduct.getId());
+        assertThat(results).extracting(SearchResult::getId).doesNotContain(anotherProduct.getId());
+        assertThat(results).extracting(SearchResult::getId).contains(thisArticle.getId());
+        assertThat(results).extracting(SearchResult::getId).doesNotContain(anotherArticle.getId());
     }
 }
